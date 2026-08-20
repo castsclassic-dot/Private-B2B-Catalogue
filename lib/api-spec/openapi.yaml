@@ -28,6 +28,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/config:
+    get:
+      operationId: getAuthConfig
+      tags: [catalogue]
+      summary: Get public Supabase client configuration
+      responses:
+        "200":
+          description: Public Supabase URL and anon key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthConfig"
   /catalogue/products:
     get:
       operationId: listProducts
@@ -103,6 +115,12 @@ components:
           type: string
       required:
         - status
+    AuthConfig:
+      type: object
+      required: [url, anonKey]
+      properties:
+        url: { type: string }
+        anonKey: { type: string }
     Vendor:
       type: object
       required: [id, name, code, productCount]

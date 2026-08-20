@@ -1,36 +1,44 @@
-# [Project name]
+# Private Jewelry Catalogue
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A private B2B jewellery catalogue for approved buyers, vendors, and administrators.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server
+- `pnpm --filter @workspace/jewelry-catalogue run dev` — run the catalogue website
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- Required secrets: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
+- Apply `supabase/schema.sql` in the Supabase SQL editor before creating users and catalogue records.
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Frontend: React + Vite + Tailwind CSS
 - API: Express 5
-- DB: PostgreSQL + Drizzle ORM
+- Auth, database, and private storage: Supabase
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/jewelry-catalogue` — responsive catalogue, login, vendor, and admin UI
+- `artifacts/api-server` — server-side Supabase token checks, catalogue endpoints, and signed image URLs
+- `lib/api-spec/openapi.yaml` — API contract source of truth
+- `supabase/schema.sql` — Supabase tables, RLS policies, private storage bucket, and auth profile trigger
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The browser uses Supabase Auth for sign-in, but catalogue and admin data are only returned by API routes that verify the bearer token server-side.
+- Product image files are stored in a private Supabase Storage bucket; the API returns short-lived signed URLs instead of public URLs.
+- Admin authorization is enforced by the `profiles.role` value and repeated in Supabase RLS policies.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Approved users can sign in, browse published products, search/filter the catalogue, and view product details.
+- Vendors have a dedicated workspace view; administrators can review vendor and product inventory.
 
 ## User preferences
 
@@ -38,7 +46,8 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Supabase schema and RLS policies must be applied before API data requests can succeed.
+- The first administrator must be assigned `role = 'admin'` in `public.profiles` after their auth account is created.
 
 ## Pointers
 

@@ -18,6 +18,15 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Get public Supabase client configuration
+ */
+export const GetAuthConfigResponse = zod.object({
+  "url": zod.string(),
+  "anonKey": zod.string()
+})
+
+
+/**
  * @summary List catalogue products
  */
 export const ListProductsResponseItem = zod.object({
@@ -28,7 +37,7 @@ export const ListProductsResponseItem = zod.object({
   "material": zod.string(),
   "description": zod.string().nullish(),
   "vendorName": zod.string(),
-  "imageUrl": zod.url().nullable(),
+  "imageUrl": zod.string().nullable(),
   "isPublished": zod.boolean().optional()
 })
 export const ListProductsResponse = zod.array(ListProductsResponseItem)
@@ -38,8 +47,8 @@ export const ListProductsResponse = zod.array(ListProductsResponseItem)
  * @summary Get catalogue summary
  */
 export const GetCatalogueSummaryResponse = zod.object({
-  "productCount": zod.int(),
-  "vendorCount": zod.int(),
+  "productCount": zod.number(),
+  "vendorCount": zod.number(),
   "categories": zod.array(zod.string())
 })
 
@@ -51,7 +60,7 @@ export const ListVendorsResponseItem = zod.object({
   "id": zod.string(),
   "name": zod.string(),
   "code": zod.string(),
-  "productCount": zod.int()
+  "productCount": zod.number()
 })
 export const ListVendorsResponse = zod.array(ListVendorsResponseItem)
 
@@ -67,7 +76,7 @@ export const ListAdminProductsResponseItem = zod.object({
   "material": zod.string(),
   "description": zod.string().nullish(),
   "vendorName": zod.string(),
-  "imageUrl": zod.url().nullable(),
+  "imageUrl": zod.string().nullable(),
   "isPublished": zod.boolean().optional()
 })
 export const ListAdminProductsResponse = zod.array(ListAdminProductsResponseItem)

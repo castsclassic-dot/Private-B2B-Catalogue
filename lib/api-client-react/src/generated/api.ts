@@ -16,6 +16,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AuthConfig,
   CatalogueSummary,
   HealthStatus,
   Product,
@@ -115,6 +116,83 @@ export function useHealthCheck<TData = Awaited<ReturnType<typeof healthCheck>>, 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getHealthCheckQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getGetAuthConfigUrl = () => {
+
+
+
+
+  return `/api/auth/config`
+}
+
+/**
+ * @summary Get public Supabase client configuration
+ */
+export const getAuthConfig = async ( options?: Parameters<typeof customFetch>[1]): Promise<AuthConfig> => {
+
+  return customFetch<AuthConfig>(getGetAuthConfigUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAuthConfigQueryKey = () => {
+    return [
+    `/api/auth/config`
+    ] as const;
+    }
+
+
+export const getGetAuthConfigQueryOptions = <TData = Awaited<ReturnType<typeof getAuthConfig>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAuthConfig>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAuthConfigQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAuthConfig>>> = ({ signal }) => getAuthConfig({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAuthConfig>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAuthConfigQueryResult = NonNullable<Awaited<ReturnType<typeof getAuthConfig>>>
+export type GetAuthConfigQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get public Supabase client configuration
+ */
+
+export function useGetAuthConfig<TData = Awaited<ReturnType<typeof getAuthConfig>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAuthConfig>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAuthConfigQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

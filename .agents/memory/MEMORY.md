@@ -1,0 +1,1 @@
+- [Supabase catalogue security](supabase-catalogue.md) — server-verify bearer tokens and sign private product image URLs; do not rely on frontend guards.

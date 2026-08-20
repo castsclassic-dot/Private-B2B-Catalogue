@@ -9,6 +9,11 @@ export interface HealthStatus {
   status: string;
 }
 
+export interface AuthConfig {
+  url: string;
+  anonKey: string;
+}
+
 export interface Vendor {
   id: string;
   name: string;

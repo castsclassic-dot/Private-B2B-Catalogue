@@ -1,0 +1,6 @@
+import { ArrowLeft, LockKeyhole } from 'lucide-react';
+import { Link } from 'wouter';
+
+export default function UnauthorizedPage() {
+  return <div className="flex min-h-[70dvh] flex-col items-center justify-center px-6 text-center" data-testid="page-unauthorized"><span className="grid size-14 place-items-center rounded-full border border-primary/25 bg-primary/5 text-primary"><LockKeyhole className="size-6" strokeWidth={1.4} /></span><p className="eyebrow mt-7 text-primary">Restricted area</p><h1 className="mt-3 font-display text-5xl tracking-[-0.04em]">Not your room.</h1><p className="mt-4 max-w-md text-sm leading-6 text-muted-foreground">Administration is reserved for Aurum team members. If you believe this is a mistake, contact your account lead.</p><Link href="/catalogue" data-testid="link-return-catalogue" className="mt-8 inline-flex items-center gap-2 rounded-lg bg-foreground px-5 py-3 text-xs font-bold text-background transition-colors hover:bg-primary"><ArrowLeft className="size-4" /> Return to catalogue</Link></div>;
+}

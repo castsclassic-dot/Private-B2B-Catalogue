@@ -5,16 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface Vendor {
-  id: string;
-  name: string;
-  code: string;
-  productCount: number;
-}
 
 export interface Product {
   id: string;
@@ -29,10 +19,3 @@ export interface Product {
   imageUrl: string | null;
   isPublished?: boolean;
 }
-
-export interface CatalogueSummary {
-  productCount: number;
-  vendorCount: number;
-  categories: string[];
-}
-

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Private Jewelry Catalogue"
+description = "A private B2B jewellery and 3D product catalogue with Supabase authentication, protected browsing, vendor administration, and private product imagery."
+version = "1.0.0"
+id = "artifacts/jewelry-catalogue"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25884
+
+[services.development]
+run = "pnpm --filter @workspace/jewelry-catalogue run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/jewelry-catalogue", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/jewelry-catalogue/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25884"
+BASE_PATH = "/"

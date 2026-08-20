@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: catalogue
+    description: Authenticated catalogue operations
+  - name: admin
+    description: Admin-only catalogue management
 paths:
   /healthz:
     get:
@@ -24,6 +28,72 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /catalogue/products:
+    get:
+      operationId: listProducts
+      tags: [catalogue]
+      summary: List catalogue products
+      responses:
+        "200":
+          description: Products visible to the authenticated catalogue user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "401":
+          description: Authentication required
+  /catalogue/summary:
+    get:
+      operationId: getCatalogueSummary
+      tags: [catalogue]
+      summary: Get catalogue summary
+      responses:
+        "200":
+          description: Summary counts for the authenticated catalogue user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogueSummary"
+        "401":
+          description: Authentication required
+  /admin/vendors:
+    get:
+      operationId: listVendors
+      tags: [admin]
+      summary: List vendors
+      responses:
+        "200":
+          description: Vendors managed by the authenticated admin
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vendor"
+        "401":
+          description: Authentication required
+        "403":
+          description: Admin access required
+  /admin/products:
+    get:
+      operationId: listAdminProducts
+      tags: [admin]
+      summary: List products for administration
+      responses:
+        "200":
+          description: Products managed by the authenticated admin
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "401":
+          description: Authentication required
+        "403":
+          description: Admin access required
 components:
   schemas:
     HealthStatus:
@@ -33,4 +103,34 @@ components:
           type: string
       required:
         - status
+    Vendor:
+      type: object
+      required: [id, name, code, productCount]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        code: { type: string }
+        productCount: { type: number }
+    Product:
+      type: object
+      required: [id, sku, name, category, material, vendorName, imageUrl]
+      properties:
+        id: { type: string }
+        sku: { type: string }
+        name: { type: string }
+        category: { type: string }
+        material: { type: string }
+        description: { type: ["string", "null"] }
+        vendorName: { type: string }
+        imageUrl: { type: ["string", "null"] }
+        isPublished: { type: boolean }
+    CatalogueSummary:
+      type: object
+      required: [productCount, vendorCount, categories]
+      properties:
+        productCount: { type: number }
+        vendorCount: { type: number }
+        categories:
+          type: array
+          items: { type: string }
 

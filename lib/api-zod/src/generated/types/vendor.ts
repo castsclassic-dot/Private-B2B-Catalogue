@@ -6,7 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export * from './catalogueSummary';
-export * from './healthStatus';
-export * from './product';
-export * from './vendor';
+export interface Vendor {
+  id: string;
+  name: string;
+  code: string;
+  productCount: number;
+}
